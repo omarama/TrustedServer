@@ -115,7 +115,7 @@ bool readTxtFile(std::vector < char> &fileText, int &length, const std::string &
 	}
 	else if (bigFile.gcount() == 0)
 	{
-		std::cout << "Error: File "<< fileName << " not found!\nPlease check the file.\nPherhaps the ReadMe.txt could help you."<<std::endl;
+		std::cout << "Error: File "<< fileName << " not found!\nPlease check the file.\nPerhaps the ReadMe.txt could help you."<<std::endl;
 		bigFile.close();
 		return false;
 	}
