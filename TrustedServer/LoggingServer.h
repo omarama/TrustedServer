@@ -3,16 +3,11 @@
 #include <fstream>
 #include <vector>
 #include "botan\sha2_32.h"
-#include "Ethernet.h"
+//#include "Ethernet.h"
+#include "SecureChannel.h"
 /*	The action type defines if a read or write access is executed.*/
-void loggingServer(std::string logRecord);
-class LoggingStorage
-{
-private:
-	const std::string Path = "../LogStorage.txt";
-public:
-	bool writeLogRecord(const std::string &log);
-};
+void loggingServer(std::string logRecord, SecureChannel &secureClientChannel);
+
 class LoggingRecord
 {
 private:
@@ -29,4 +24,7 @@ public:
 	int createResponse(std::string &response);
 	std::string getLogRecord();
 	void setLogSaved(bool saved) { this->logSaved = saved; }
+	std::string getHostID() { return this->hostID; }
 };
+
+bool readTxtFile(std::vector < char> &fileText, int &length, const std::string &fileName);

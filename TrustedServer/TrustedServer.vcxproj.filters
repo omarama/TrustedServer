@@ -31,6 +31,12 @@
     <Filter Include="Header Files\TDK Distribution">
       <UniqueIdentifier>{79ca77d5-3524-494c-b18d-1cfdffaf4665}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\AAA">
+      <UniqueIdentifier>{8b55ec32-ae2c-4a5b-a8a0-b4b88925ca7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AAA">
+      <UniqueIdentifier>{ac3e73d0-470b-4f35-865f-a68455f90cba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -54,6 +60,12 @@
     <ClInclude Include="LoggingServer.h">
       <Filter>Header Files\Logging Server</Filter>
     </ClInclude>
+    <ClInclude Include="SecureChannel.h">
+      <Filter>Header Files\Channel Block</Filter>
+    </ClInclude>
+    <ClInclude Include="AAA.h">
+      <Filter>Header Files\AAA</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TrustedServer.cpp">
@@ -71,6 +83,12 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="LoggingServer.cpp">
       <Filter>Source Files\Logging Server</Filter>
+    </ClCompile>
+    <ClCompile Include="SecureChannel.cpp">
+      <Filter>Source Files\Channel Block</Filter>
+    </ClCompile>
+    <ClCompile Include="AAA.cpp">
+      <Filter>Source Files\AAA</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

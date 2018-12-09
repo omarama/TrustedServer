@@ -129,9 +129,9 @@ int Ethernet::sendOut(const std::string &buf)
 	if (socketResult == SOCKET_ERROR)
 	{
 		printf("send failed: %d\n", WSAGetLastError());
-		return 0;
+		return socketResult;
 	}
-	printf("Bytes send: %d\n", socketResult);
+	//printf("Bytes send: %d\n", socketResult);
 	return socketResult;
 }
 int Ethernet::receiveIn(std::string &buf, int length)
@@ -142,14 +142,14 @@ int Ethernet::receiveIn(std::string &buf, int length)
 	socketResult = recv(this->myClientSock, buffer, length, 0);
 	if (socketResult > 0)
 	{
-		printf("Bytes received: %d\n", socketResult);
+		//printf("Bytes received: %d\n", socketResult);
 		buf = std::string(buffer, socketResult);
 	}
 	else if (socketResult == SOCKET_ERROR)
 	{
 		printf("Received failed : %d\n", WSAGetLastError());
 		delete[] buffer;
-		return -1;
+		return socketResult;
 	}
 	delete[] buffer;
 	return socketResult;

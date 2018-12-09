@@ -1,62 +1,35 @@
 #include "stdafx.h"
 #include "LoggingServer.h"
 /*Logging Block*/
-void loggingServer(std::string logRecord)
+void loggingServer(std::string logRecord1, SecureChannel &secureClientChannel)
 {
-	auto& sock= Ethernet::getInstance();
 	bool ret = false; 
 	std::string response;
+	std::string logRecord;
+	secureClientChannel.receiveSecure(logRecord, 100);
 	LoggingRecord logRec(logRecord);
-	LoggingStorage logStore;
-	ret = logStore.writeLogRecord(logRec.getLogRecord());
+	ret = accountingAppend(logRec.getHostID(), logRec.getLogRecord());
 	if (ret)
 	{
-		logRec.setLogSaved(true);
+		authorizationCheck(logRec.getHostID(), logRec.getLogRecord(), response);
+		secureClientChannel.sendSecure(response);
 	}
 	else
 	{
+		response.insert(response.begin(),32,'1');
 		logRec.setLogSaved(false);
-	}
-	ret = logRec.createResponse(response);
-	sock.sendOut(response);
-}
-/*Logging Storage Class*/
-bool LoggingStorage::writeLogRecord(const std::string &log)
-{
-	std::ofstream bigFile;
-	bigFile.open(Path, std::ios::app);
-	if (bigFile.is_open())
-	{
-		std::string temp(log, 10, 10);
-		int time = atoi(temp.c_str());
-		time_t t = time;
-		struct tm *buf;
-		char str[26];
-		buf = gmtime(&t);
-		buf->tm_hour += 1;   //German time
-		asctime_s(str, sizeof str, buf);
-		
-		printf("local: %s", str);
-		bigFile.write(str, 26);
-		bigFile.write(log.c_str(), 100);
-		bigFile.write("\n", 1);
-		bigFile.close();
-		return true;
-	}
-	else
-	{
-		printf("Cannot write file!\n");
-		return false;
+		secureClientChannel.sendSecure(response);
 	}
 }
+
 /*Logging Record Class*/
 LoggingRecord::LoggingRecord(std::string logRecord) : 
-	fileName(logRecord.substr(73,18)) , 
-	versionNumber(logRecord.substr(59,10)) , 
-	documentSize(logRecord.substr(45,10)), 
-	hostID(logRecord.substr(31,10)), 
-	action (logRecord.substr(28,1)),
-	timeStamp(logRecord.substr(11,10))
+	fileName(logRecord.substr(72,18)) , 
+	versionNumber(logRecord.substr(58,10)) , 
+	documentSize(logRecord.substr(44,10)), 
+	hostID(logRecord.substr(30,10)), 
+	action (logRecord.substr(27,1)),
+	timeStamp(logRecord.substr(10,10))
 {
 
 }
@@ -64,7 +37,7 @@ LoggingRecord::LoggingRecord(std::string logRecord) :
 //Ist natürlich ausreichen, da der Inhalt später über den trusted Channel gesichert ist. Soll allerdings trotzdem noch mehr in die response ? 
 int LoggingRecord::createResponse(std::string &resp)
 {
-	if (this->logSaved)
+	if (1)//(this->logSaved)
 	{
 		resp.replace(0, 1, "1");
 		return 1; 

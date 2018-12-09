@@ -15,65 +15,114 @@ struct trustedServerManagement
 int main()
 {
 	std::cout << "Start the Trusted Server" << std::endl; 
+	std::vector<char> publicKey;
+	int publicKeyLength = 64;
+	readTxtFile(publicKey,publicKeyLength, "../publicID.txt");
+	publicKey.insert(publicKey.begin(), '\x4');
+	setPublicClientKeys(2, publicKey);
 	auto& sock = Ethernet::getInstance();
 	trustedServerManagement unit;
-	/*Remote Attestation and Channel Key Exchange*/ 
-	//Das muss noch fertig gemacht werden 
-	//	ra_proc1();
-	std::string message;
 	int result = 0;
-	std::cout << "Socket is established" << std::endl; 
+	std::cout << "Socket is established\nWaiting for Clients." << std::endl; 
 	while (1)
 	{
-		trustedServerManagement unit;
-		//	ra_proc1();
-		std::string message;
-		result = 0;
 		/*Wait for Client*/
+		unit.AUTHENTICATED = false;
 		sock.acceptClient();
-		std::cout << "Client accepted!" << std::endl; 
-		do
+		std::cout << "\nClient accepted!" << std::endl;
+		/*Generate Secure Channel to the client*/
+		SecureChannel secureClientChannel(sock);
+		std::cout << "Channel Key generated.\n";
+		if (secureClientChannel.getClientID() > 0)
 		{
-			/*Receive message from socket*/
-			result = sock.receiveIn(message, 101);
-			/*Check Authenticated*/
-			//Das wird vermutlich schon in der Remote attestation gemacht. Sobald die implementiert ist muss ich hierrüber nochmal nachdenken. 
-			unit.AUTHENTICATED = true;
-			/*Chek Authorization*/
-			//Hier soll sowas wie darf der User Lesen, schreiben etc. 
-			unit.AUTHORIZED = true;
-			/*Add a new client*/
-			//Momentan nur 1 Client, daher nur als Dummy für ein größeres System.
-			if (message.at(0) == 'A')
+			unit.AUTHENTICATED = true; 
+			do
 			{
-
-			}
-			/*TDK Distribution*/
-			else if (message.at(0) == 'K')
-			{
-				std::cout << "\nKey requested!" << std::endl; 
-				if (unit.AUTHENTICATED == true && unit.AUTHORIZED == true)
+				std::string message;
+				unit.AUTHENTICATED = secureClientChannel.getClientAuthenticated();
+				/*Receive message from socket*/
+				result = secureClientChannel.receiveSecure(message, 1);
+				if (result <= 0)
 				{
-					distributionTDK();
+					message.clear();
+					result = 0;
+					break;
 				}
-			}
-			else if (message.at(0) == 'L')
-			{
-				std::cout << "\nLogging Record received!" << std::endl;
-				/*Store Logging Record*/
-				if (unit.AUTHENTICATED == true && unit.AUTHORIZED == true)
+				else if (message.at(0) == 'G')
 				{
-					loggingServer(message);
+
+				}
+				/*TDK Distribution*/
+				else if (message.at(0) == 'K')
+				{
+					std::cout << "\nKey requested!" << std::endl;
+					unit.AUTHORIZED = authorizationCheck(secureClientChannel.getClientID(), "TDK");
+					if (unit.AUTHENTICATED == true && unit.AUTHORIZED == true)
+					{
+						distributionTDK(secureClientChannel);
+					}
+					unit.AUTHORIZED = false; 
+				}
+				else if (message.at(0) == 'L')
+				{
+					if (unit.AUTHENTICATED == true)
+					{
+						loggingServer(message, secureClientChannel);
+					}
+					else
+					{//Send Invalid Flag0
+						secureClientChannel.sendSecure("0");
+					}
 				}
 				else
-				{//Send Invalid Flag
-					sock.sendOut("0");
+				{
+					message.clear();
+					result = 0;
+					break;
 				}
-			}
-		} while (result > 0);
-		sock.removeClient();
+
+			} while (result > 0);
+		}
+			sock.removeClient();
 		//getchar();
 	}
     return 0;
 }
+bool readTxtFile(std::vector < char> &fileText, int &length, const std::string &fileName)
+{
+	std::ifstream bigFile(fileName.c_str(), std::ifstream::binary);
+	fileText.reserve(MAX_SIZE);
 
+	bigFile.seekg(0, bigFile.end);
+	length = bigFile.tellg();
+	bigFile.seekg(0, bigFile.beg);
+	if (length < MAX_SIZE && length > 0)
+	{
+		fileText.resize(length);
+		bigFile.read(fileText.data(), length);
+	}
+	else
+	{
+		length = MAX_SIZE;
+		fileText.resize(length);
+		bigFile.read(fileText.data(), MAX_SIZE);
+	}
+	if (bigFile.gcount() == length)
+	{
+		std::cout << "The reading size is " << length / 1000 << " kB" << std::endl;
+		bigFile.close();
+		return true;
+	}
+	else if (bigFile.gcount() == 0)
+	{
+		std::cout << "Error: File "<< fileName << " not found!\nPlease check the file.\nPherhaps the ReadMe.txt could help you."<<std::endl;
+		bigFile.close();
+		return false;
+	}
+	else
+	{
+		std::cout << "Error: only " << bigFile.gcount() << " could be read";
+		bigFile.close();
+		return false;
+	}
+}

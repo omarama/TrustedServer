@@ -3,34 +3,54 @@
 
 // This is the private EC key of SP, the corresponding public EC key is
 // hard coded in isv_enclave. It is based on NIST P-256 curve.
-static const ec_private tsPrivKey = {
+static const ec256_private tsPrivKey =
+{
 	{
-		//0x01,0x8c,0x03,0xd1, 0x53,0x34,0x57,0xad,0xea, 0xae,
-		//0xb6, 0x65,0x3b,0x6a,0x86,0x1f,0xec,0x87,0x9c,
-		//0x43,0x11,0xde,0x66,0x3b, 0xce,0xa1, 0x52,0x2d,
-		//0xbb,0x6c,0xe7,0x90
-		0x90, 0xe7, 0x6c, 0xbb, 0x2d, 0x52, 0xa1, 0xce,
-		0x3b, 0x66, 0xde, 0x11, 0x43, 0x9c, 0x87, 0xec,
-		0x1f, 0x86, 0x6a, 0x3b, 0x65, 0xb6, 0xae, 0xea,
-		0xad, 0x57, 0x34, 0x53, 0xd1, 0x03, 0x8c, 0x01
+		/*Little Endian Byte Order*/
+		//0x90, 0xe7, 0x6c, 0xbb, 0x2d, 0x52, 0xa1, 0xce,
+		//0x3b, 0x66, 0xde, 0x11, 0x43, 0x9c, 0x87, 0xec,
+		//0x1f, 0x86, 0x6a, 0x3b, 0x65, 0xb6, 0xae, 0xea,
+		//0xad, 0x57, 0x34, 0x53, 0xd1, 0x03, 0x8c, 0x01
+
+		/*Big Endian Byte Order*/
+		0x01, 0x8c, 0x03, 0xd1, 0x53, 0x34, 0x57, 0xad, 
+		0xea, 0xae, 0xb6, 0x65, 0x3b, 0x6a, 0x86, 0x1f,
+		0xec, 0x87, 0x9c, 0x43, 0x11, 0xde, 0x66, 0x3b,
+		0xce, 0xa1, 0x52, 0x2d, 0xbb, 0x6c, 0xe7, 0x90
 	}
 };
+
 // This is the public EC key of SP, this key is hard coded in isv_enclave.
 // It is based on NIST P-256 curve. Not used in the SP code.
 static const ec_pub tsPubKey = {
 	{
-		0x72, 0x12, 0x8a, 0x7a, 0x17, 0x52, 0x6e, 0xbf,
-		0x85, 0xd0, 0x3a, 0x62, 0x37, 0x30, 0xae, 0xad,
-		0x3e, 0x3d, 0xaa, 0xee, 0x9c, 0x60, 0x73, 0x1d,
-		0xb0, 0x5b, 0xe8, 0x62, 0x1c, 0x4b, 0xeb, 0x38
+		/*Big Endian Byte Order*/
+		0x38, 0xeb, 0x4b, 0x1c, 0x62, 0xe8, 0x5b, 0xb0,
+		0x1d, 0x73, 0x60, 0x9c, 0xee, 0xaa, 0x3d, 0x3e,
+		0xad, 0xae, 0x30, 0x37, 0x62, 0x3a, 0xd0, 0x85, 
+		0xbf, 0x6e, 0x52, 0x17, 0x7a, 0x8a, 0x12, 0x72
+
+		/*Little Endian Byte Order*/
+		//0x72, 0x12, 0x8a, 0x7a, 0x17, 0x52, 0x6e, 0xbf,
+		//0x85, 0xd0, 0x3a, 0x62, 0x37, 0x30, 0xae, 0xad,
+		//0x3e, 0x3d, 0xaa, 0xee, 0x9c, 0x60, 0x73, 0x1d,
+		//0xb0, 0x5b, 0xe8, 0x62, 0x1c, 0x4b, 0xeb, 0x38
 	},
 	{
-		0xd4, 0x81, 0x40, 0xd9, 0x50, 0xe2, 0x57, 0x7b,
-		0x26, 0xee, 0xb7, 0x41, 0xe7, 0xc6, 0x14, 0xe2,
-		0x24, 0xb7, 0xbd, 0xc9, 0x03, 0xf2, 0x9a, 0x28,
-		0xa8, 0x3c, 0xc8, 0x10, 0x11, 0x14, 0x5e, 0x06
+		/*Big Endian Byte Order*/
+		0x06, 0x5e, 0x14, 0x11, 0x10, 0xc8, 0x3c, 0xa8,
+		0x28, 0x9a, 0xf2, 0x03, 0xc9, 0xbd, 0xb7, 0x24,
+		0xe2, 0x14, 0xc6, 0xe7, 0x41, 0xb7, 0xee, 0x26, 
+		0x7b, 0x57, 0xe2, 0x50, 0xd9, 0x40, 0x81, 0xd4
+
+		/*Little Endian Byte Order*/
+		//0xd4, 0x81, 0x40, 0xd9, 0x50, 0xe2, 0x57, 0x7b,
+		//0x26, 0xee, 0xb7, 0x41, 0xe7, 0xc6, 0x14, 0xe2,
+		//0x24, 0xb7, 0xbd, 0xc9, 0x03, 0xf2, 0x9a, 0x28,
+		//0xa8, 0x3c, 0xc8, 0x10, 0x11, 0x14, 0x5e, 0x06
 	}
 };
+
 int ra_proc1()
 {
 	auto& sock = Ethernet::getInstance();
@@ -74,6 +94,7 @@ int ra_proc1()
 			for (int i = 0; i < result; i++)
 			{
 				ra_msg1.g_a.gy[31-i] = msg.at(i);
+			
 			}
 		}
 		else
@@ -86,7 +107,7 @@ int ra_proc1()
 		{
 			for (int i = 0; i < result; i++)
 			{
-				ra_msg1.gid[4-i] = msg.at(i);
+				ra_msg1.gid[3-i] = msg.at(i);
 			}
 		}
 		else
@@ -95,34 +116,46 @@ int ra_proc1()
 		}
 		std::cout << "There are " << result << " bytes received!" << std::endl;
 		/*Message 1 is received from the client*/
+		// Achtung was kann davor ??? Performance
 		/*Generate Message 2*/
+
 		/////////////////////////////////////1/////////////////////////////////////////////////////////////
 		Botan::AutoSeeded_RNG rng;
 		// ec domain and
 		Botan::EC_Group domain("secp256r1");
 		std::string kdf = "KDF1(AES-128/CMAC)";
-		//private and public key TS
+		//private and public key TS  
 		Botan::PointGFp tsPubPoint(domain.get_curve(), Botan::BigInt(tsPubKey.gx, 32), Botan::BigInt(tsPubKey.gy, 32));
-		Botan::ECDSA_PrivateKey privKeyTS(rng,domain,Botan::BigInt(tsPrivKey.r,32));
-		Botan::ECDSA_PublicKey pubKeyTS(domain, tsPubPoint);
+		Botan::ECDSA_PrivateKey tsPrivKey(rng,domain,Botan::BigInt(tsPrivKey.r,32));
+		Botan::ECDSA_PublicKey tsPubKey(domain, tsPubPoint);
+		if (tsPubKey.check_key(rng, 1))
+		{
+			std::cout << "The TS key is valid!"<<std::endl; 
+		}
 		//generate ECDH keys
-		Botan::PointGFp clientPubPoint(domain.get_curve(), Botan::BigInt(ra_msg1.g_a.gx,32), Botan::BigInt(ra_msg1.g_a.gy,32));
-		Botan::ECDH_PrivateKey channelPrivKeyTS(rng, domain);
-		Botan::PointGFp tsChannelPoint(channelPrivKeyTS.public_point());
-		Botan::ECDH_PublicKey channelPubKeyC(domain,clientPubPoint);
-		if (channelPubKeyC.check_key(rng, 1))
+		/* TS Key */
+		Botan::ECDH_PrivateKey Gb(rng, domain);
+		Botan::PointGFp tsChannelPoint(Gb.public_point());
+		/* Client Key */
+		Botan::PointGFp clientPubPoint(domain.get_curve(), Botan::BigInt(&ra_msg1.g_a.gx[0], 32), Botan::BigInt(&ra_msg1.g_a.gy[0], 32));
+		Botan::ECDH_PublicKey Ga(domain,clientPubPoint);
+		if (Ga.check_key(rng, 1))
 		{
 			std::cout << "Key is valid" << std::endl;
+		}
+		else
+		{
+			std::cout << "Key is not valid" << std::endl;
 		}
 
 		/////////////////////////////////////2//////////////////////////////////////////////////
 		// Construct key agreements
-		Botan::PK_Key_Agreement ecdhTS(channelPrivKeyTS, rng, "Raw");
+		Botan::PK_Key_Agreement ecdhTS(Gb, rng, "Raw");
 		// Agree on shared secret and derive symmetric key of 256 bit length
-		Botan::secure_vector<uint8_t> Gab_secret = ecdhTS.derive_key(16, channelPubKeyC.public_value()).bits_of();
+		Botan::secure_vector<uint8_t> Gab_secret = ecdhTS.derive_key(32, Ga.public_value()).bits_of();
 		const std::vector<uint8_t> key = Botan::hex_decode("00000000000000000000000000000000");
-		std::vector<uint8_t> invertedGab;// = Botan::hex_decode("6BC1BEE22E409F96E93D7E117393172A");
-		for (int i = 15; i <= 0 ;i--)
+		std::vector<uint8_t> invertedGab;
+		for (int i = 31; i >= 0 ;i--)
 		{
 			invertedGab.push_back(Gab_secret.at(i));
 		}
@@ -149,18 +182,22 @@ int ra_proc1()
 		///////////////////////////////4(1)/////////////////////////////////////////
 		ra_msg2.quote_type = 0x0001;
 		memset(ra_msg2.spid, 0, sizeof(ra_msg2.spid));
+
 		///////////////////////////////5(2)////////////////////////////////////////////
 		ra_msg2.kdf_id = 0x0001;
+
 		///////////////////////////////6(3)////////////////////////////////////////
-		Botan::PK_Signer signer(privKeyTS, rng, "EMSA1(SHA-256)");
+		Botan::PK_Signer signer(tsPrivKey, rng, "EMSA1(SHA-256)");
+
 		Botan::BigInt buf(tsChannelPoint.get_x());
 		uint8_t temp[32];
 		memcpy(temp, buf.data(), sizeof(temp));
 		for (int i = 0; i < 32; i++)
 		{
-			memcpy(&ra_msg2.g_b.gx[i], &temp[31-i], 1);
+			memcpy(&ra_msg2.g_b.gx[i], &temp[31-i], 1);	
 		}
 		buf.operator<<=(32 * 8);
+
 		buf.operator+= (tsChannelPoint.get_y());
 		memcpy(temp, buf.data(), sizeof(temp));
 		for (int i = 0; i < 32; i++)
@@ -168,16 +205,35 @@ int ra_proc1()
 			memcpy(&ra_msg2.g_b.gy[i], &temp[31 - i], 1);
 		}
 		buf.operator<<=(32 * 8);
+
 		buf.operator+= (clientPubPoint.get_x());
+		memcpy(temp, buf.data(), sizeof(temp));
+		uint8_t clientPubPointxL[32];
+		for (int i = 0; i < 32; i++)
+		{
+			memcpy(&clientPubPointxL[i], &temp[31 - i], 1);
+		}
 		buf.operator<<=(32 * 8);
+		
 		buf.operator+= (clientPubPoint.get_y());
+		memcpy(temp, buf.data(), sizeof(temp));
+		uint8_t clientPubPointyL[32];
+		for (int i = 0; i < 32; i++)
+		{
+			memcpy(&clientPubPointyL[i], &temp[31 - i], 1);
+		}
 
 		uint8_t Gba[128];
-		memcpy(Gba, buf.data(), sizeof(Gba));			//eventuell falsch kopiert ?? schau nochmal nach der reihenfolge
+		memcpy(Gba, ra_msg2.g_b.gx, 32);
+		memcpy(Gba+32, ra_msg2.g_b.gy, 32);
+		memcpy(Gba+64, clientPubPointxL, 32);
+		memcpy(Gba+96, clientPubPointyL, 32);
+
+		//memcpy(Gba, buf.data(), sizeof(Gba));			//eventuell falsch kopiert ?? schau nochmal nach der reihenfolge
 		signer.update(Gba, sizeof(Gba));
 		std::vector<uint8_t> signature = signer.signature(rng);
 		// verify signature
-		Botan::PK_Verifier verifier(pubKeyTS, "EMSA1(SHA-256)");
+		Botan::PK_Verifier verifier(tsPubKey, "EMSA1(SHA-256)");
 		verifier.update(Gba,sizeof(Gba));
 		std::cout << std::endl << "is " << (verifier.check_signature(signature) ? "valid" : "invalid");
 		for (int i = 0; i < 32; i++)

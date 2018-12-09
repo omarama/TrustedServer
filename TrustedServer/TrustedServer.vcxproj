@@ -120,6 +120,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Botan\include\botan-2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,17 +152,21 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AAA.h" />
     <ClInclude Include="Authentication.h" />
     <ClInclude Include="Ethernet.h" />
     <ClInclude Include="LoggingServer.h" />
+    <ClInclude Include="SecureChannel.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TDK.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AAA.cpp" />
     <ClCompile Include="Authentication.cpp" />
     <ClCompile Include="Ethernet.cpp" />
     <ClCompile Include="LoggingServer.cpp" />
+    <ClCompile Include="SecureChannel.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
