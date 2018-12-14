@@ -119,7 +119,7 @@ int SecureChannel::generateTempSecret(Ethernet &sock)
 	int status = receiveSecure(buf, 11);
 	if ( (buf.substr(0,11) == "HelloServer"))
 	{
-		std::cout << "Erfolgreich" << std::endl;
+		//std::cout << "Erfolgreich" << std::endl;
 		status = sendSecure("HelloClient");
 		this->clientAuthenticated = true; 
 	}

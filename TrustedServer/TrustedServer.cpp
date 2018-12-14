@@ -32,7 +32,7 @@ int main()
 		std::cout << "\nClient accepted!" << std::endl;
 		/*Generate Secure Channel to the client*/
 		SecureChannel secureClientChannel(sock);
-		std::cout << "Channel Key generated.\n";
+		std::cout << "Channel Key is generated.\n";
 		if (secureClientChannel.getClientID() > 0)
 		{
 			unit.AUTHENTICATED = true; 
@@ -55,7 +55,7 @@ int main()
 				/*TDK Distribution*/
 				else if (message.at(0) == 'K')
 				{
-					std::cout << "\nKey requested!" << std::endl;
+					std::cout << "\nKey requested from Client!" << std::endl;
 					unit.AUTHORIZED = authorizationCheck(secureClientChannel.getClientID(), "TDK");
 					if (unit.AUTHENTICATED == true && unit.AUTHORIZED == true)
 					{
@@ -65,6 +65,8 @@ int main()
 				}
 				else if (message.at(0) == 'L')
 				{
+
+					std::cout << "\nLogging received from Client!" << std::endl;
 					if (unit.AUTHENTICATED == true)
 					{
 						loggingServer(message, secureClientChannel);
@@ -109,7 +111,7 @@ bool readTxtFile(std::vector < char> &fileText, int &length, const std::string &
 	}
 	if (bigFile.gcount() == length)
 	{
-		std::cout << "The reading size is " << length / 1000 << " kB" << std::endl;
+		//std::cout << "The reading size is " << length / 1000 << " kB" << std::endl;
 		bigFile.close();
 		return true;
 	}
